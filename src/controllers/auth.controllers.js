@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt'
 import { pool } from '../db.js'
 
 export const signIn = (req, res) => res.send('Ingresando');
@@ -6,9 +7,10 @@ export const signUp = async (req, res) => {
     const { name, email, password } = req.body;
 
     try {
-        console.log(name, email, password);
+        const hashedPassword = await bcrypt.hash(password, 10)
+        console.log(hashedPassword)
 
-        const result = await pool.query('INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING *', [name, email, password])
+        const result = await pool.query('INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING *', [name, email, hashedPassword])
 
         res.json(result.rows[0])
     } catch (error) {
