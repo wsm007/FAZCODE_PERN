@@ -1,4 +1,5 @@
-import { Router } from 'express';
+// import { Router } from 'express';
+import Router from 'express-promise-router';
 import { profile, signIn, signOut, signUp } from '../controllers/auth.controllers.js'
 
 const router = Router();

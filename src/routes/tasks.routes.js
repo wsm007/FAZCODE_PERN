@@ -1,4 +1,5 @@
-import { Router } from 'express';
+// import { Router } from 'express';
+import Router from 'express-promise-router';
 
 import { getTasks, getTask, postTask, putTask, patchTask, deleteTask } from '../controllers/tasks.controllers.js';
 

@@ -1,6 +1,25 @@
+import { pool } from '../db.js'
+
 export const signIn = (req, res) => res.send('Ingresando');
 
-export const signUp = (req, res) => res.send('Registrando');
+export const signUp = async (req, res) => {
+    const { name, email, password } = req.body;
+
+    try {
+        console.log(name, email, password);
+
+        const result = await pool.query('INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING *', [name, email, password])
+
+        res.json(result.rows[0])
+    } catch (error) {
+        if (error.code === '23505') {
+            return res.status(400).json({
+                message: "El email ya está registrado"
+            })
+        }
+
+    };
+};
 
 export const signOut = (req, res) => res.send('Cerrando sesion');
 

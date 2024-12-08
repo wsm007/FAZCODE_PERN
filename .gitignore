@@ -1,3 +1,7 @@
+# BD Postgres
+postgres/
+
+
 # Logs
 logs
 *.log

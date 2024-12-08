@@ -1,0 +1,37 @@
+services:
+  # Servicio de base de datos
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    hostname: host-postgres
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: taskdb
+    
+    ports:
+      - "5432:5432"
+    
+    volumes:
+    # La BD estará almacenada en la misma carpeta del proyecto
+      - './postgres:/var/lib/postgresql/data'
+    
+    # Reiniciar siempre
+    restart: always
+
+
+  # Servicio de pgAdmin para gestionar la base de datos
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: wsm007@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    # volumes:
+    #   - pgadmin-data:/var/lib/pgadmin
+    restart: always
+    #unless-stopped
