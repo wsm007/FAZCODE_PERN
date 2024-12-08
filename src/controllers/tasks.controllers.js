@@ -2,6 +2,7 @@ import { pool } from '../db.js'
 
 // Obtener todas las tareas
 export const getTasks = async (req, res) => {
+    console.log(req.userId)
     const result = await pool.query('SELECt * FROM task')
     res.json(result.rows)
 }

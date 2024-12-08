@@ -3,12 +3,17 @@ import express from 'express'; // Framework web para Node.js
 import morgan from 'morgan';   // Middleware de registro de solicitudes HTTP
 import taskRoutes from './routes/tasks.routes.js'
 import authRoutes from './routes/auth.routes.js'
+import cookieParser from 'cookie-parser'
+
+
 // Crear una instancia de la aplicación Express
 const app = express();
 
 // Configuración de Middlewares ============
 // morgan('dev'): Middleware para registro de solicitudes en formato de desarrollo
 app.use(morgan('dev'));
+
+app.use(cookieParser());
 
 // Middleware para parsear cuerpos de solicitudes JSON
 app.use(express.json());
