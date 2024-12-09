@@ -30,6 +30,8 @@ export const signIn = async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000
     })
 
+    // Omitir el envió del password al cliente
+    delete result.rows[0].password;
     return res.json(result.rows[0])
 }
 
@@ -50,6 +52,8 @@ export const signUp = async (req, res, next) => {
             maxAge: 24 * 60 * 60 * 1000
         })
 
+        // Omitir el envió del password al cliente
+        delete result.rows[0].password;
         return res.json(result.rows[0])
     } catch (error) {
         if (error.code === '23505') {
@@ -70,5 +74,8 @@ export const signOut = (req, res) => {
 export const profile = async (req, res) => {
 
     const result = await pool.query('SELECT * FROM users WHERE id = $1', [req.userId])
+
+    // Omitir el envió del password al cliente
+    delete result.rows[0].password;
     return res.json(result.rows[0]);
 }
