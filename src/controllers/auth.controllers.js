@@ -67,8 +67,10 @@ export const signUp = async (req, res, next) => {
 };
 
 export const signOut = (req, res) => {
-    res.clearCookie('token');
-    res.sendStatus(200);
+    res.clearCookie('token').json({
+        message: 'Logout con éxito'
+    })
+
 }
 
 export const profile = async (req, res) => {
