@@ -1,4 +1,5 @@
-import { Input, Card, Button } from '../components/ui'
+import { Input, Card, Button, Label } from '../components/ui'
+import { Link } from "react-router-dom"
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 
@@ -19,6 +20,7 @@ function RegisterPage() {
                 <h3 className="text-2xl font-bold">Registro</h3>
 
                 <form onSubmit={onSubmit}>
+                    <Label htmlFor='name'>Nombres:</Label>
                     <Input placeholder="Ingrese su nombre y apellido"
                         {...register('name', {
                             required: true,
@@ -28,25 +30,30 @@ function RegisterPage() {
                     {
                         errors.name && <p className='text-red-500'> El nombre es requerido</p>
                     }
-
+                    <Label htmlFor='email'>Correo:</Label>
                     <Input type="email" placeholder="Ingrese su correo"
                         {...register('email', {
                             required: true
                         })}
                     />
                     {
-                        errors.email && <p className='text-red-500'> El email es requerido</p>
+                        errors.email && <p className='text-red-500'> El correo es requerido</p>
                     }
+                    <Label htmlFor='password'>Contraseña:</Label>
                     <Input type="password" placeholder="Ingrese su contraseña"
                         {...register('password', {
                             required: true
                         })}
                     />
                     {
-                        errors.password && <p className='text-red-500'> El password es requerido</p>
+                        errors.password && <p className='text-red-500'> La contraseña es requerido</p>
                     }
 
                     <Button>Registrar</Button>
+                    <div className='flex justify-between my-4'>
+                        <p> Ya estás registrado? </p>
+                        <Link to='/login' className='font-bold'> Inicio de sesión</Link>
+                    </div>
                 </form>
             </Card>
         </div>
