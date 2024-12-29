@@ -1,51 +1,88 @@
-import { createContext, useState, useContext } from "react";
-import axios from 'axios'
+import { createContext, useState, useContext, useEffect } from "react";
+import Cookie from 'js-cookie';
+import axios from '../api/axios';
 
-export const AuthContext = createContext()
+// Creamos el contexto
+const AuthContext = createContext();
 
 // Hook personalizado
-export const useAuth = () => {
-    const context = useContext(AuthContext)
-    if (!context) {
-        throw new Error('useAuth mus be used within an AuthProvider')
-    }
-    return context
+function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 }
 
-// eslint-disable-next-line react/prop-types
-export function AuthProvider({ children }) {
-    const [user, setUser] = useState(null)
-    const [isAuth, setIsAuth] = useState(false)
-    const [errors, seterror] = useState(null)
+// Componente Provider
+function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [isAuth, setIsAuth] = useState(false);
+  const [errors, setErrors] = useState(null);
 
-    async function signin(data){
-        const res = await axios.post('http://localhost:3000/api/signin', data, {
-            withCredentials: true
+  const signin = async (data) => {
+    try {
+      const res = await axios.post('/signin', data);
+      setUser(res.data);
+      setIsAuth(true);
+      return res.data;
+    } catch (error) {
+      if (Array.isArray(error.response.data.error)) {
+        return setErrors(error.response.data.error);
+      }
+      setErrors([error.response.data.message]);
+    }
+  };
+
+  const signup = async (data) => {
+    try {
+      const res = await axios.post('/signup', data);
+      setUser(res.data);
+      setIsAuth(true);
+      return res.data;
+    } catch (error) {
+      if (Array.isArray(error.response.data.error)) {
+        return setErrors(error.response.data.error);
+      }
+      setErrors([error.response.data.message]);
+    }
+  };
+
+  useEffect(() => {
+
+    if (Cookie.get('token')) {
+      axios
+        .get('/profile')
+        .then(res => {
+          console.log(res.data);
+          setUser(res.data);
+          setIsAuth(true);
         })
-        console.log(res.data)
-        setUser(res.data)
+        .catch(err => {
+          console.log(err);
+          setUser(null);
+          setIsAuth(false);
+        })
+
     }
 
-    async function signup(data) {
-        const res = await axios.post('http://localhost:3000/api/signup', data, {
-            withCredentials: true
-        });
-        console.log(res.data);
-        setUser(res.data)
-    }
-    
+  }, []);
 
-    return (
-        <AuthContext.Provider value={{
-            user,
-            isAuth,
-            errors,
-            signup,
-            signin
-        }}>
-            {children}
-        </AuthContext.Provider>
-    )
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuth,
+        errors,
+        signup,
+        signin
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
-// export default AuthProvider
+
+// Exportamos todo al final
+export { AuthProvider, useAuth, AuthContext };

@@ -8,10 +8,10 @@ const emailSchema = z.string({
 
 // Reusable schema for password validation
 const passwordSchema = z.string({
-  required_error: 'El password es requerido',
-  invalid_type_error: 'El password debe ser un texto'
-}).min(6, { message: 'El password debe tener al menos 6 caracteres' })
-  .max(255, { message: 'El password no puede exceder 255 caracteres' })
+  required_error: 'La contraseña es requerido',
+  invalid_type_error: 'La contraseña debe ser un texto'
+}).min(6, { message: 'La contraseña debe tener al menos 6 caracteres' })
+  .max(255, { message: 'La contraseña no puede exceder 255 caracteres' })
 
 // Reusable schema for name validation
 const nameSchema = z.string({
